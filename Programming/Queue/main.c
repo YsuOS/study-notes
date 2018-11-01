@@ -13,10 +13,13 @@ void printQueue(struct ringBuffer *q)
 	int i;
 
 	printf("head[%d], tail[%d]\n", q->head, q->tail);
+	printf("[i]: 9 8 7 6 5 4 3 2 1 0\n");
+	printf("************************\n");
+	printf("     ");
 	for(i=0; i<SIZE; i++) {
 		printf("%c ", q->buffer[i]);
 	}
-	printf("\n");
+	printf("\n\n");
 }
 	
 void enqueue(struct ringBuffer *q, int number)
@@ -24,22 +27,18 @@ void enqueue(struct ringBuffer *q, int number)
 	char item = '0' + number;
 	if (q->buffer[q->tail] == '_') {
 		q->buffer[q->tail] = item;
-		if (q->tail == 0) 
-			q->tail = SIZE - 1;
-		else
-			q->tail--;
+		q->tail = (q->tail + SIZE - 1) % SIZE;
 	}
 }
 
 int dequeue(struct ringBuffer *q)
 {
 	char item;
-	item = q->buffer[q->head];
-	q->buffer[q->head] = '_';
-	if (q->head == 0)
-		q->head = SIZE - 1;
-	else
-		q->head--;
+	if (q->buffer[q->tail] != '_') {
+		item = q->buffer[q->head];
+		q->buffer[q->head] = '_';
+		q->head = (q->head + SIZE - 1) % SIZE;
+	}
 	return item;
 }
 
