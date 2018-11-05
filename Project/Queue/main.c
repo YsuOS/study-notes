@@ -20,25 +20,26 @@ void printQueue(struct ringBuffer *q)
 {
 	int i;
 
-	printf("head[%d], tail[%d]\n", q->head, q->tail);
-	printf("[i]: 0 1 2 3 4 5 6 7 8 9\n");
-	printf("************************\n");
-	printf("     ");
+	printf("head[%d], tail[%d] ", q->head, q->tail);
+//	printf("[i]: 0 1 2 3 4 5 6 7 8 9\n");
+//	printf("************************\n");
+//	printf("     ");
 	for(i=0; i<SIZE; i++) {
 		printf("%c ", q->buffer[i]);
 	}
-	printf("\n");
+//	printf("\n");
 }
 	
 void enqueue(struct ringBuffer *q, int number)
 {
 	char item = '0' + number;
 	if (q->buffer[q->tail] == '_') {
-		printf("--ENQUEUE--\n");
 		q->buffer[q->tail] = item;
 		q->tail = (q->tail + SIZE - 1) % SIZE;
 		printQueue(q);
-		printf("\n");
+		printf(" <= %c  (enqueue)\n", item);
+	} else {
+		printf("failed to enqueue\n");
 	}
 }
 
@@ -46,12 +47,13 @@ void dequeue(struct ringBuffer *q)
 {
 	char item;
 	if (q->buffer[q->head] != '_') {
-		printf("--DEQUEUE--\n");
 		item = q->buffer[q->head];
 		q->buffer[q->head] = '_';
 		q->head = (q->head + SIZE - 1) % SIZE;
 		printQueue(q);
-		printf("dequeue: %c\n\n", item);
+		printf(" => %c  (dequeue)\n", item);
+	} else {
+		printf("failed to dequeue\n");
 	}
 }
 
@@ -66,8 +68,13 @@ int main(void)
 	queue.tail = 0;
 	for(i=0; i<SIZE; i++)
 		queue.buffer[i] = '_';
-	printf("Initialize\n");
 	printQueue(&queue);
+	printf(" Initialize\n");
+	for (i=0; i<5; i++) {
+		s = makeRand();
+		enqueue(&queue, s);
+	}
+	printf("\n\n");
 
 	for (i=0; i<20; i++){
 		s = makeRand();
