@@ -10,12 +10,12 @@ int makeRand(void) {
 	return s;
 }
 
-struct Stack {
+typedef struct Stack{
 	char buffer[SIZE];
 	int top;
-};
+}Stack;
 
-void printStack(struct Stack *s)
+void printStack(Stack *s)
 {
 	int i;
 
@@ -28,9 +28,10 @@ void printStack(struct Stack *s)
 	}
 }
 	
-void push(struct Stack *s, int number)
+void push(Stack *s, int number)
 {
 	char item = '0' + number;
+
 	if (s->top + 1 < SIZE) {
 		s->buffer[++s->top] = item;
 		printStack(s);
@@ -40,9 +41,10 @@ void push(struct Stack *s, int number)
 	}
 }
 
-void pop(struct Stack *s)
+void pop(Stack *s)
 {
 	char item;
+
 	if (s->top >= 0) {
 		item = s->buffer[s->top];
 		s->buffer[s->top--] = '_';
@@ -55,7 +57,7 @@ void pop(struct Stack *s)
 
 int main(void)
 {
-	struct Stack stack;
+	Stack stack;
 	int i, s;
 	srand(time(NULL));
 
@@ -73,11 +75,10 @@ int main(void)
 
 	for (i=0; i<20; i++){
 		s = makeRand();
-		if (s % 2 == 0) {
+		if (s % 2 == 0)
 			push(&stack, s);
-		} else {
+		else
 			pop(&stack);
-		}
 	}
 	
 	return 0;
