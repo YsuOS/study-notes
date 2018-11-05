@@ -10,71 +10,73 @@ int makeRand(void) {
 	return s;
 }
 
-struct ringBuffer {
+struct Stack {
 	char buffer[SIZE];
-	int head;
-	int tail;
+	int top;
 };
 
-void printQueue(struct ringBuffer *q)
+void printStack(struct Stack *s)
 {
 	int i;
 
-	printf("head[%d], tail[%d]\n", q->head, q->tail);
-	printf("[i]: 0 1 2 3 4 5 6 7 8 9\n");
-	printf("************************\n");
-	printf("     ");
+	if (s->top >= 0)
+		printf("top[%d] ", s->top);
+	else
+		printf("top[-] ");
 	for(i=0; i<SIZE; i++) {
-		printf("%c ", q->buffer[i]);
+		printf("%c ", s->buffer[i]);
 	}
-	printf("\n");
 }
 	
-void enqueue(struct ringBuffer *q, int number)
+void push(struct Stack *s, int number)
 {
 	char item = '0' + number;
-	if (q->buffer[q->tail] == '_') {
-		printf("--ENQUEUE--\n");
-		q->buffer[q->tail] = item;
-		q->tail = (q->tail + SIZE - 1) % SIZE;
-		printQueue(q);
-		printf("\n");
+	if (s->top + 1 < SIZE) {
+		s->buffer[++s->top] = item;
+		printStack(s);
+		printf(" <= %c  (push)\n", item);
+	} else {
+		printf("failed to push\n");
 	}
 }
 
-void dequeue(struct ringBuffer *q)
+void pop(struct Stack *s)
 {
 	char item;
-	if (q->buffer[q->head] != '_') {
-		printf("--DEQUEUE--\n");
-		item = q->buffer[q->head];
-		q->buffer[q->head] = '_';
-		q->head = (q->head + SIZE - 1) % SIZE;
-		printQueue(q);
-		printf("dequeue: %c\n\n", item);
+	if (s->top >= 0) {
+		item = s->buffer[s->top];
+		s->buffer[s->top--] = '_';
+		printStack(s);
+		printf(" => %c  (pop)\n", item);
+	} else {
+		printf("failed to pop\n");
 	}
 }
 
 int main(void)
 {
-	struct ringBuffer queue;
+	struct Stack stack;
 	int i, s;
 	srand(time(NULL));
 
-	//initialize queue
-	queue.head = 0;
-	queue.tail = 0;
+	//initialize stack
+	stack.top = -1;
 	for(i=0; i<SIZE; i++)
-		queue.buffer[i] = '_';
-	printf("Initialize\n");
-	printQueue(&queue);
+		stack.buffer[i] = '_';
+	printStack(&stack);
+	printf(" Initialize\n");
+	for (i=0; i<5; i++) {
+		s = makeRand();
+		push(&stack, s);
+	}
+	printf("\n\n");
 
 	for (i=0; i<20; i++){
 		s = makeRand();
 		if (s % 2 == 0) {
-			enqueue(&queue, s);
+			push(&stack, s);
 		} else {
-			dequeue(&queue);
+			pop(&stack);
 		}
 	}
 	
