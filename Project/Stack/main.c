@@ -10,7 +10,7 @@ int makeRand(void) {
 	return s;
 }
 
-typedef struct Stack{
+typedef struct {
 	char buffer[SIZE];
 	int top;
 }Stack;
@@ -27,12 +27,28 @@ void printStack(Stack *s)
 		printf("%c ", s->buffer[i]);
 	}
 }
-	
+
+int isFull(Stack *s)
+{
+	if (s->top + 1 >= SIZE)
+		return 1;
+	else
+		return 0;
+}
+
+int isEmpty(Stack *s)
+{
+	if (s->top < 0)
+		return 1;
+	else
+		return 0;
+}
+
 void push(Stack *s, int number)
 {
 	char item = '0' + number;
 
-	if (s->top + 1 < SIZE) {
+	if (!isFull(s)) {
 		s->buffer[++s->top] = item;
 		printStack(s);
 		printf(" <= %c  (push)\n", item);
@@ -45,7 +61,7 @@ void pop(Stack *s)
 {
 	char item;
 
-	if (s->top >= 0) {
+	if (!isEmpty(s)) {
 		item = s->buffer[s->top];
 		s->buffer[s->top--] = '_';
 		printStack(s);
@@ -73,6 +89,7 @@ int main(void)
 	}
 	printf("\n\n");
 
+	//samples
 	for (i=0; i<20; i++){
 		s = makeRand();
 		if (s % 2 == 0)
