@@ -48,10 +48,11 @@ void pop(node_t *tail)
 		return;
 	while(head->next->next != NULL)
 		head = head->next;
-	printf("pop : %c\n", head->next->value);
+	printf("pop %c\n", head->next->value);
 	free(head->next);
 	head->next = NULL;
 }
+
 // insert; insert a new node to * place from tail(except tail)
 void insert(node_t *tail, int n)
 {
@@ -76,6 +77,21 @@ void insert(node_t *tail, int n)
 
 }
 // remove; remove a node from * place from tail(except tail)
+void remove_node(node_t *tail, int n)
+{
+	node_t *p;
+	int tmp = n;
+
+	p = tail;
+	if(n <= 0 || p->next == NULL)
+		return;
+	while(--n != 0 && p->next != NULL)
+		p = p->next;
+	printf("remove %c to %d place from tail\n", p->next->value, tmp);
+	free(p->next);
+	p->next = p->next->next;
+}
+
 int main(void)
 {
 	int i;
@@ -96,6 +112,8 @@ int main(void)
 	insert(&tail,4);
 	printList(&tail);
 	insert(&tail,8);
+	printList(&tail);
+	remove_node(&tail,3);
 	printList(&tail);
 
 	//free memory of all nodes
