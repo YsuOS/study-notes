@@ -5,19 +5,12 @@
 
 #define SIZE 10
 
+//minimum heap tree
+
 int makeRand(void) {
 	int s;
 	s = rand() % 10;
 	return s;
-}
-
-void insert(char *heap, int i)
-{
-	
-	if(heap[2*i+1] == '-')
-		heap[2*i+1] = makeRand() + '0';
-	if(heap[2*i+2] == '-')
-		heap[2*i+2] = makeRand() + '0';
 }
 
 void printHeap(char *heap)
@@ -37,23 +30,50 @@ void printHeap(char *heap)
 			x++;
 		}
 	}
-	printf("\n");
+	printf("\n\n");
 }
 	
+void insert(char *heap, int i)
+{
+	char tmp;
+	if(heap[0] == '-'){
+		heap[0] = makeRand() + '0';
+		printHeap(heap);
+		return;
+	}else if(heap[2*i+1] == '-'){
+		heap[2*i+1] = makeRand() + '0';
+		if(heap[2*i] > heap[2*i+1]){
+			tmp = heap[2*i];
+			heap[2*i] = heap[2*i+1];
+			heap[2*i+1] = tmp;
+		}
+		printHeap(heap);
+		return;
+	}else if(heap[2*i+2] == '-'){
+		heap[2*i+2] = makeRand() + '0';
+		if(heap[2*i] > heap[2*i+2]){
+			tmp = heap[2*i];
+			heap[2*i] = heap[2*i+2];
+			heap[2*i+2] = tmp;
+		}
+		printHeap(heap);
+		return;
+	}
+}
+
 int main(void)
 {
 	char heap[SIZE];
-	int i;
+	int i,j;
 	srand(time(NULL));
 	for(i=0; i<SIZE; i++){
 		heap[i] = '-';
 	}
-	heap[0] = makeRand() + '0';
 
-	for(i=0; i<SIZE; i++){
-		insert(heap, i);
+	for(i=0; 2*i+2<=SIZE; i++){
+		for(j=1;j<=pow(2, i);j++)
+			insert(heap, j);
 	}
-	printHeap(heap);
 	
 	return 0;
 }
