@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #define SIZE 10
 
@@ -12,6 +13,7 @@ int makeRand(void) {
 
 void insert(char *heap, int i)
 {
+	
 	if(heap[2*i+1] == '-')
 		heap[2*i+1] = makeRand() + '0';
 	if(heap[2*i+2] == '-')
@@ -20,10 +22,20 @@ void insert(char *heap, int i)
 
 void printHeap(char *heap)
 {
-	int i;
+	int i,l,x;
+	l = x = 0;
 
+	// new line's condition for printing heap
+	// l(x) = 2^x + l(x-1)
+	// l(0) = 0
 	for(i=0; i<SIZE; i++) {
 		printf("%c ", heap[i]);
+		if(i == 0 || i == pow(2, x) + l){
+			printf("\n");
+			if(i != 0)
+				l = pow(2, x) + l;
+			x++;
+		}
 	}
 	printf("\n");
 }
