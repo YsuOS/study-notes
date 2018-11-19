@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+
+#define SIZE 10
+
+//minimum heap tree
 
 int makeRand(void) {
 	int s;
@@ -8,77 +13,99 @@ int makeRand(void) {
 	return s;
 }
 
-typedef struct *tnode{
-	int value;
-	int *left;
-	int *right;
-}tnode;
+void printHeap(char *heap)
+{
+	int i,l,x;
+	l = x = 0;
 
-//void printStack(Stack *s)
-//{
-//	int i;
-//
-//	if (s->top >= 0)
-//		printf("top[%d] ", s->top);
-//	else
-//		printf("top[-] ");
-//	for(i=0; i<SIZE; i++) {
-//		printf("%c ", s->buffer[i]);
-//	}
-//}
+	// new line's condition for printing heap
+	// l(x) = 2^x + l(x-1)
+	// l(0) = 0
+	for(i=0; i<SIZE; i++) {
+		printf("%c ", heap[i]);
+		if(i == 0 || i == pow(2, x) + l){
+			printf("\n");
+			if(i != 0)
+				l = pow(2, x) + l;
+			x++;
+		}
+	}
+	printf("\n\n");
+}
 	
-//void push(Stack *s, int number)
-//{
-//	char item = '0' + number;
-//
-//	if (s->top + 1 < SIZE) {
-//		s->buffer[++s->top] = item;
-//		printStack(s);
-//		printf(" <= %c  (push)\n", item);
-//	} else {
-//		printf("failed to push\n");
-//	}
-//}
-//
-//void pop(Stack *s)
-//{
-//	char item;
-//
-//	if (s->top >= 0) {
-//		item = s->buffer[s->top];
-//		s->buffer[s->top--] = '_';
-//		printStack(s);
-//		printf(" => %c  (pop)\n", item);
-//	} else {
-//		printf("failed to pop\n");
-//	}
-//}
+void push(char *heap)
+{
+	char tmp;
+	int i=0;
+	while(heap[i] != '-')
+		i++;
+	heap[i] = makeRand() + '0';
+	printf("insert:%c\n", heap[i]);
+	printHeap(heap);
+	if(i == 0)
+		return;
+	while(i != 0){
+		if((i-1)/2 != '-' && heap[i] < heap[(i-1)/2]){
+			tmp = heap[i];
+			heap[i] = heap[(i-1)/2];
+			heap[(i-1)/2] = tmp;
+			i = (i - 1)/2;
+			printHeap(heap);
+		}else{
+			break;
+		}
+	}
+
+}
+
+void pop(char *heap)
+{
+	int i,j=0;
+	char tmp;
+	i=SIZE-1;
+	printf("pop:%c\n", heap[0]);
+	heap[0] = '-';
+	printHeap(heap);
+	while(heap[i]=='-')
+		i--;
+	heap[0] = heap[i];
+	heap[i] = '-';
+	printHeap(heap);
+	while(2*j+1<i){
+		if(heap[2*j+1] <= heap[2*j+2] && heap[j] > heap[2*j+1]){
+			tmp = heap[j];
+			heap[j] = heap[2*j+1];
+			heap[2*j+1] = tmp;
+			j = 2*j+1;
+			printHeap(heap);
+		}else if(heap[2*j+1] > heap[2*j+2] && heap[j] > heap[2*j+2]){
+			tmp = heap[j];
+			heap[j] = heap[2*j+2];
+			heap[2*j+2] = tmp;
+			j = 2*j+2;
+			printHeap(heap);
+		}else{
+			break;
+		}
+	}
+}
 
 int main(void)
 {
-//	tnode node1, node2;
-//	int i, s;
-//	srand(time(NULL));
-//
-//	//initialize stack
-//	stack.top = -1;
-//	for(i=0; i<SIZE; i++)
-//		stack.buffer[i] = '_';
-//	printStack(&stack);
-//	printf(" Initialize\n");
-//	for (i=0; i<5; i++) {
-//		s = makeRand();
-//		push(&stack, s);
-//	}
-//	printf("\n\n");
-//
-//	for (i=0; i<20; i++){
-//		s = makeRand();
-//		if (s % 2 == 0)
-//			push(&stack, s);
-//		else
-//			pop(&stack);
-//	}
-//	
+	char heap[SIZE];
+	int i,j,k;
+	srand(time(NULL));
+	for(i=0; i<SIZE; i++){
+		heap[i] = '-';
+	}
+	i=k=0;
+	while(i<SIZE){
+		push(heap);
+		i++;
+	}
+	pop(heap);
+	pop(heap);
+	push(heap);
+	
 	return 0;
 }
