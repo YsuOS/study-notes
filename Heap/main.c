@@ -38,12 +38,23 @@ void insert(char *heap, int i)
 	char tmp;
 	if(heap[i] == '-'){
 		heap[i] = makeRand() + '0';
-		if((i-1)/2 != '-' && heap[i] < heap[(i-1)/2]){
-			tmp = heap[i];
-			heap[i] = heap[(i-1)/2];
-			heap[(i-1)/2] = tmp;
-		}			
-		printHeap(heap);
+		printf("insert:%c\n", heap[i]);
+		if(i == 0){
+			printHeap(heap);
+			return;
+		}
+		while(i != 0){
+			if((i-1)/2 != '-' && heap[i] < heap[(i-1)/2]){
+				tmp = heap[i];
+				heap[i] = heap[(i-1)/2];
+				heap[(i-1)/2] = tmp;
+				i = (i - 1)/2;
+				printHeap(heap);
+			}else{
+				printHeap(heap);
+				break;
+			}
+		}
 	}
 }
 
