@@ -36,43 +36,30 @@ void printHeap(char *heap)
 void insert(char *heap, int i)
 {
 	char tmp;
-	if(heap[0] == '-'){
-		heap[0] = makeRand() + '0';
+	if(heap[i] == '-'){
+		heap[i] = makeRand() + '0';
+		if((i-1)/2 != '-' && heap[i] < heap[(i-1)/2]){
+			tmp = heap[i];
+			heap[i] = heap[(i-1)/2];
+			heap[(i-1)/2] = tmp;
+		}			
 		printHeap(heap);
-		return;
-	}else if(heap[2*i+1] == '-'){
-		heap[2*i+1] = makeRand() + '0';
-		if(heap[2*i] > heap[2*i+1]){
-			tmp = heap[2*i];
-			heap[2*i] = heap[2*i+1];
-			heap[2*i+1] = tmp;
-		}
-		printHeap(heap);
-		return;
-	}else if(heap[2*i+2] == '-'){
-		heap[2*i+2] = makeRand() + '0';
-		if(heap[2*i] > heap[2*i+2]){
-			tmp = heap[2*i];
-			heap[2*i] = heap[2*i+2];
-			heap[2*i+2] = tmp;
-		}
-		printHeap(heap);
-		return;
 	}
 }
 
 int main(void)
 {
 	char heap[SIZE];
-	int i,j;
+	int i,j,k;
 	srand(time(NULL));
 	for(i=0; i<SIZE; i++){
 		heap[i] = '-';
 	}
-
+	k=0;
 	for(i=0; 2*i+2<=SIZE; i++){
-		for(j=1;j<=pow(2, i);j++)
+		for(j=i;j<pow(2,k);j++)
 			insert(heap, j);
+		k++;
 	}
 	
 	return 0;
