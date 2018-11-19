@@ -33,29 +33,29 @@ void printHeap(char *heap)
 	printf("\n\n");
 }
 	
-void insert(char *heap, int i)
+void push(char *heap)
 {
 	char tmp;
-	if(heap[i] == '-'){
-		heap[i] = makeRand() + '0';
-		printf("insert:%c\n", heap[i]);
-		if(i == 0){
+	int i=0;
+	while(heap[i] != '-')
+		i++;
+	heap[i] = makeRand() + '0';
+	printf("insert:%c\n", heap[i]);
+	printHeap(heap);
+	if(i == 0)
+		return;
+	while(i != 0){
+		if((i-1)/2 != '-' && heap[i] < heap[(i-1)/2]){
+			tmp = heap[i];
+			heap[i] = heap[(i-1)/2];
+			heap[(i-1)/2] = tmp;
+			i = (i - 1)/2;
 			printHeap(heap);
-			return;
-		}
-		while(i != 0){
-			if((i-1)/2 != '-' && heap[i] < heap[(i-1)/2]){
-				tmp = heap[i];
-				heap[i] = heap[(i-1)/2];
-				heap[(i-1)/2] = tmp;
-				i = (i - 1)/2;
-				printHeap(heap);
-			}else{
-				printHeap(heap);
-				break;
-			}
+		}else{
+			break;
 		}
 	}
+
 }
 
 void pop(char *heap)
@@ -71,7 +71,7 @@ void pop(char *heap)
 	heap[0] = heap[i];
 	heap[i] = '-';
 	printHeap(heap);
-	while(2*j+2<i){
+	while(2*j+1<i){
 		if(heap[2*j+1] <= heap[2*j+2] && heap[j] > heap[2*j+1]){
 			tmp = heap[j];
 			heap[j] = heap[2*j+1];
@@ -100,12 +100,12 @@ int main(void)
 	}
 	i=k=0;
 	while(i<SIZE){
-		for(;i<pow(2,k);i++)
-			insert(heap, i);
-		k++;
+		push(heap);
+		i++;
 	}
 	pop(heap);
 	pop(heap);
+	push(heap);
 	
 	return 0;
 }
