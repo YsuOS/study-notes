@@ -55,10 +55,10 @@ int main(void)
 	for(i=0; i<SIZE; i++){
 		heap[i] = '-';
 	}
-	k=0;
-	for(i=0; 2*i+2<=SIZE; i++){
-		for(j=i;j<pow(2,k);j++)
-			insert(heap, j);
+	i=k=0;
+	while(i<SIZE){
+		for(;i<pow(2,k);i++)
+			insert(heap, i);
 		k++;
 	}
 	
