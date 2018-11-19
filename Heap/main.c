@@ -60,7 +60,7 @@ void insert(char *heap, int i)
 
 void pop(char *heap)
 {
-	int i;
+	int i,j=0;
 	char tmp;
 	i=SIZE-1;
 	printf("pop:%c\n", heap[0]);
@@ -71,19 +71,18 @@ void pop(char *heap)
 	heap[0] = heap[i];
 	heap[i] = '-';
 	printHeap(heap);
-	i = 0;
-	while(2*i+2<SIZE){
-		if(heap[2*i+1] <= heap[2*i+2] && heap[i] > heap[2*i+1]){
-			tmp = heap[i];
-			heap[i] = heap[2*i+1];
-			heap[2*i+1] = tmp;
-			i = 2*i+1;
+	while(2*j+2<i){
+		if(heap[2*j+1] <= heap[2*j+2] && heap[j] > heap[2*j+1]){
+			tmp = heap[j];
+			heap[j] = heap[2*j+1];
+			heap[2*j+1] = tmp;
+			j = 2*j+1;
 			printHeap(heap);
-		}else if(heap[2*i+1] > heap[2*i+2] && heap[i] > heap[2*i+2]){
-			tmp = heap[i];
-			heap[i] = heap[2*i+2];
-			heap[2*i+2] = tmp;
-			i = 2*i+2;
+		}else if(heap[2*j+1] > heap[2*j+2] && heap[j] > heap[2*j+2]){
+			tmp = heap[j];
+			heap[j] = heap[2*j+2];
+			heap[2*j+2] = tmp;
+			j = 2*j+2;
 			printHeap(heap);
 		}else{
 			break;
@@ -105,6 +104,7 @@ int main(void)
 			insert(heap, i);
 		k++;
 	}
+	pop(heap);
 	pop(heap);
 	
 	return 0;
